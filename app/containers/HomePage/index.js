@@ -5,13 +5,16 @@
  *
  */
 
-import React, { Component } from 'react';
+import React, { Component, memo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import messages from './messages';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
 import ProductList from '../../components/ProductList';
 import Cart from '../../components/Cart';
-
+import 'react-notifications/lib/notifications.css';
 const Title = styled.div`
   font-size: 2.5em;
   text-align: left;
@@ -23,11 +26,26 @@ const Title = styled.div`
 
 const MainWrapper = styled.div`
   position: relative;
+  width:100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
 `;
-
-export default class HomePage extends Component {
+const Row = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+const ListWrapper = styled.div`
+flex: 1;
+`;
+const CartWrapper = styled.div`
+flex: 0 1 300px;
+`;
+class HomePage extends Component {
   constructor(props) {
     super(props);
+
   }
 
   render() {
@@ -39,16 +57,33 @@ export default class HomePage extends Component {
           </div>
         </Title>
         <MainWrapper className="container-fluid">
-          <div className="row">
-            <div className="col-md-8 col-lg-9">
+          <Row>
+            <ListWrapper>
               <ProductList />
-            </div>
-            <div className="col-md-4  col-lg-3">
-              <Cart />
-            </div>
-          </div>
+            </ListWrapper>
+            {this.props.addedItems && this.props.addedItems.length > 0 &&
+              <CartWrapper>
+                <Cart />
+              </CartWrapper>
+            }
+          </Row>
         </MainWrapper>
       </div>
     );
   }
 }
+
+
+const mapStateToProps = state => ({
+  addedItems: state.firestore.ordered.cart,
+});
+
+const withConnect = connect(mapStateToProps);
+
+export default compose(
+  withConnect,
+  memo,
+  firestoreConnect([
+    { collection: 'cart' },
+  ])
+)(HomePage);
