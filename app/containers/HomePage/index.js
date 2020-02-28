@@ -35,6 +35,7 @@ const MainWrapper = styled.div`
 const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 `;
 const ListWrapper = styled.div`
 flex: 1;

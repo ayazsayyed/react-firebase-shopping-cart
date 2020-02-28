@@ -36,6 +36,9 @@ const CartButton = styled.button`
 const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
+  @media screen and (max-width: 767px) {
+    justify-content: center;
+  }
 `;
 
 const Card = styled.div`
@@ -57,7 +60,7 @@ const ImageWrapper = styled.div`
   border: .0625rem solid #dee2e6;
   border-radius: .25rem;
   box-shadow: 0 1px 2px rgba(0,0,0,.075);
-  width:200px;
+  width:250px;
   @media (max-width: 900px) {
     width: 190px;
   }
